@@ -1,0 +1,13 @@
+#ifndef CODIGOS_RETORNO_H_INCLUDED
+#define CODIGOS_RETORNO_H_INCLUDED
+
+#define EXITO 0
+#define ERROR_SIN_MEMORIA -1
+#define ERROR_OPERACION_INVALIDA -2
+
+#define ENCONTRO 1
+#define NO_ENCONTRO 0
+
+#define MINIMO(x,y) ((x)<(y) ? (x):(y))
+
+#endif // CODIGOS_RETORNO_H_INCLUDED

@@ -1,0 +1,11 @@
+-el lote de pruebas de main corrobora los 4 casos de insercion:
+1. hay espacio y no esta dup.
+2. hay espacio y esta dup.
+3. no hay espacio y no esta dup.
+4. no hay espacio y esta dup.
+
+-la funcion mostrar_lrucache() no la pide el tp pero la implemente para debugear lo que hace la cache. muestra al mas reciente arriba.
+
+-defini al t_nodo como t_nodo_simple para que no entre en conflicto con el t_nodo de la lista doble ni del arbol, a los que diria de ponerles t_nodo_doble y t_nodo_arbol.
+
+-para no hacer un #define EXITO 0, ERROR_SIN_MEM -1, ENCONTRO 1 o MINIMO(x,y) ((x)<(y) ? (x):(y)) en cada estructura de datos y que entre en conflicto, hice un archivo constantes.h que los contiene y se incluye en los demas.

@@ -4,4 +4,5 @@ obj/
 *.exe
 *.depend
 *.layout
+*.cbp
 .DS_Store
