@@ -4,6 +4,7 @@
 #define EXITO 0
 #define ERROR_SIN_MEMORIA -1
 #define ERROR_OPERACION_INVALIDA -2
+#define ERROR_CLAVE_DUPLICADA -3
 
 #define ENCONTRO 1
 #define NO_ENCONTRO 0
