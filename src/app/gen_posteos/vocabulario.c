@@ -160,7 +160,6 @@ const char *verbos[] =
     "alcanza",
     "supera",
     "recuerda",
-    "cuestiona",
     "reconoce",
     "representa",
     "simplifica",

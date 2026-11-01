@@ -1,4 +1,4 @@
-#include "posteo.h"
+#include "../comun/posteo.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -16,8 +16,8 @@ int main(int argc, char *argv[])
     long        __stat_tamanyoArchivo, __stat_leidos, __stat_errores;
     int         i;
 
-    entrada = "posteos.dat";
-    salida  = "posteos_verificado.csv";
+    entrada = "data/bin/posteos.dat";
+    salida  = "data/csv/posteos_verificado.csv";
     limite  = -1;
 
     // Para evitar parámetros posicionales y mejorar un poco la comprensión del pasaje de argumentos del usuario

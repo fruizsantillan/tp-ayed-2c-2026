@@ -12,4 +12,14 @@
 
 # App (parte 3)
 
-- Separé la capa de aplicación en tres programas independientes (generador de posteos, generador de lotes y simulador), y el simulador en dos variantes (parte 1, y parte 2). La Parte 3 incluye tareas de naturaleza distinta: generar datos de prueba (con semilla), y medir tiempos de procesamiento. La consigna habla de “el programa que genera los lotes” y de “ese mismo programa” al que se le agrega la caché primero con la Parte 1 y luego con la Parte 2.
+- Con la misma semilla se generan los mismos lotes, pero si se está en la misma plataforma. `rand()` no es portable.
+
+- Separamos la capa de aplicación en tres programas independientes (generador de posteos, generador de lotes y simulador), y el simulador en dos variantes (parte 1, y parte 2). La Parte 3 incluye tareas de naturaleza distinta: generar datos de prueba (con semilla), y medir tiempos de procesamiento. La consigna habla de “el programa que genera los lotes” y de “ese mismo programa” al que se le agrega la caché primero con la Parte 1 y luego con la Parte 2.
+
+- En cuanto al lote ordenado de usuarios, la consigna dice “los id de los feeds aparecen en orden creciente", se asume que se refiere a estrictamente creciente en todo el archivo global, no solo dentro de cada feed. Entonces, como por defecto hay 50000 posteos, no puede haber más de 2500 usuarios en este lote, para que no se repitan los posteos.
+
+- Al igual que el generador de posts, el generador de usuarios se parametriza, con la cantidad de registros que se desea tener. La cantidad que dice la consigna de 200 puede no ser tan representativa de la degradación de performance (más que nada por el tema de la resolución de clock), entonces el valor por defecto lo fijamos en uno considerablemente más alto.
+
+- Las ids de un mismo muro son todas distintas entre sí; no tiene sentido que un muro muestre los mismos posts más de una vez, aparte inflaría artificialmente los aciertos.
+
+- "debe recibir una semilla [...] de manera que un mismo lote pueda volver a generarse”. Otro parámetro, que si se omite se usa time(NULL) y se imprime, igual que gen_posteos.
