@@ -5,14 +5,14 @@
 #include "../comun/usuario.h"
 #include "../../../include/constantes/constantes.h"
 
-/* Las distribuciones SOLO completan los feeds de un arreglo en memoria:
+/* Las distribuciones completan los feeds de un arreglo en memoria:
    no abren archivos ni imprimen, y no tocan el nombre del usuario ni el
    relleno de la estructura (eso es responsabilidad del programa que las usa).
    Todas toman los numeros aleatorios de aleatorio.h: se debe llamar antes a
    aleatorio_semilla() para que el lote sea reproducible.
- 
+
    Retornan EXITO, ERROR_SIN_MEMORIA o ERROR_OPERACION_INVALIDA. */
- 
+
 /*  Una cantidad de populares menor que el feed haria imposible armar un feed
     sin repetidos solo con posteos populares. */
 

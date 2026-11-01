@@ -1,7 +1,7 @@
 #include "distribuciones.h"
 
-#include "../comun/aleatorio.h"
 #include "../../../include/constantes/constantes.h"
+#include "../comun/aleatorio.h"
 
 #include <stdlib.h>
 #include <string.h>

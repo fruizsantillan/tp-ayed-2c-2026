@@ -1,5 +1,6 @@
 #include "distribuciones.h"
 #include "../comun/aleatorio.h"
+#include "../comun/metalog.h"
 #include "../comun/usuario.h"
 
 #include <stdio.h>
@@ -7,14 +8,18 @@
 #include <string.h>
 #include <time.h>
 
+#define PARAM_CLAVE_TIPO "-t"
+#define PARAM_CLAVE_SALIDA "-o"
+#define PARAM_CLAVE_SEMILLA "-s"
+#define PARAM_CLAVE_USUARIOS "-u"
+#define PARAM_CLAVE_CANTPOPU "-c"
+#define PARAM_CLAVE_PROBPOPU "-p"
 #define TIPO_CONCENTRADO                "concentrado"
 #define TIPO_DISPERSO                   "disperso"
 #define TIPO_ORDENADO                   "ordenado"
-
 #define PATH_CONCENTRADO_DEFAULT        "data/bin/lote_concentrado.dat"
 #define PATH_DISPERSO_DEFAULT           "data/bin/lote_disperso.dat"
 #define PATH_ORDENADO_DEFAULT           "data/bin/lote_ordenado.dat"
-
 #define USUARIOS_DEFAULT                2000
 #define POPULARES_DEFAULT               100
 #define PORCENTAJE_POPULARES_DEFAULT    90
@@ -64,25 +69,24 @@ int leerArgumentos(int argc, char *argv[], tConfig *cfg)
     cfg->concentrado.cantidadPopulares = POPULARES_DEFAULT;
     cfg->concentrado.porcentajePopulares = PORCENTAJE_POPULARES_DEFAULT;
 
-    /* Para evitar parametros posicionales y mejorar un poco la comprension del pasaje de argumentos del usuario */
 
     for (i = 1; i < argc; i++)
     {
-        if (strcmp(argv[i], "-t") == 0 && i + 1 < argc)
-            cfg->tipo = argv[++i];
-        else if (strcmp(argv[i], "-o") == 0 && i + 1 < argc)
-            cfg->pathSalida = argv[++i];
-        else if (strcmp(argv[i], "-s") == 0 && i + 1 < argc)
-            cfg->semilla = (unsigned) strtoul(argv[++i], NULL, 10);
-        else if (strcmp(argv[i], "-u") == 0 && i + 1 < argc)
-            cfg->usuarios = strtoul(argv[++i], NULL, 10);
-        else if (strcmp(argv[i], "-c") == 0 && i + 1 < argc)
-            cfg->concentrado.cantidadPopulares = (unsigned) strtoul(argv[++i], NULL, 10);
-        else if (strcmp(argv[i], "-p") == 0 && i + 1 < argc)
-            cfg->concentrado.porcentajePopulares = (unsigned) strtoul(argv[++i], NULL, 10);
+        if (strcmp(*(argv + i), PARAM_CLAVE_TIPO) == 0 && i + 1 < argc)
+            cfg->tipo = *(argv + ++i);
+        else if (strcmp(*(argv + i), PARAM_CLAVE_SALIDA) == 0 && i + 1 < argc)
+            cfg->pathSalida = *(argv + ++i);
+        else if (strcmp(*(argv + i), PARAM_CLAVE_SEMILLA) == 0 && i + 1 < argc)
+            cfg->semilla = (unsigned) strtoul(*(argv + ++i), NULL, 10);
+        else if (strcmp(*(argv + i), PARAM_CLAVE_USUARIOS) == 0 && i + 1 < argc)
+            cfg->usuarios = strtoul(*(argv + ++i), NULL, 10);
+        else if (strcmp(*(argv + i), PARAM_CLAVE_CANTPOPU) == 0 && i + 1 < argc)
+            cfg->concentrado.cantidadPopulares = (unsigned) strtoul(*(argv + ++i), NULL, 10);
+        else if (strcmp(*(argv + i), PARAM_CLAVE_PROBPOPU) == 0 && i + 1 < argc)
+            cfg->concentrado.porcentajePopulares = (unsigned) strtoul(*(argv + ++i), NULL, 10);
         else
         {
-            mostrarUso(argv[0]);
+            mostrarUso(*argv);
             return ERROR_OPERACION_INVALIDA;
         }
     }
@@ -97,10 +101,10 @@ int leerArgumentos(int argc, char *argv[], tConfig *cfg)
         pathPorDefecto = PATH_ORDENADO_DEFAULT;
     else
         pathPorDefecto = NULL;
- 
+
     if (!pathPorDefecto)
     {
-        mostrarUso(argv[0]);
+        mostrarUso(*argv);
         return ERROR_OPERACION_INVALIDA;
     }
 
@@ -115,7 +119,7 @@ int leerArgumentos(int argc, char *argv[], tConfig *cfg)
 
     if (strcmp(cfg->tipo, TIPO_ORDENADO) == 0 && cfg->usuarios > CANTIDAD_REGISTROS_POSTEOS / TAMANYO_FEED)
     {
-        fprintf(stderr, "El lote ordenado admite como maximo %lu usuarios\n", (unsigned long) (CANTIDAD_REGISTROS_POSTEOS / TAMANYO_FEED));
+        fprintf(stderr, "El lote ordenado admite como maximo %lu usuarios\n", (long unsigned int) CANTIDAD_REGISTROS_POSTEOS / TAMANYO_FEED);
         return ERROR_OPERACION_INVALIDA;
     }
 
@@ -140,10 +144,8 @@ int armarLote(const tConfig *cfg, tUsuario *lote)
     if (resultado != EXITO)
         return resultado;
 
-    /* El % no cambia nada (usuarios <= MAXIMO_USUARIOS) pero acota el rango y protege
-       el char[15] aunque fallara la validacion de leerArgumentos */
     for (i = 0; i < cfg->usuarios; i++)
-        sprintf(lote[i].usuario, "usuario%06lu", (i + 1) % (MAXIMO_USUARIOS + 1));
+        sprintf((lote + i)->usuario, "usuario%06lu", (i + 1) % (MAXIMO_USUARIOS + 1));
 
     return EXITO;
 }
@@ -171,7 +173,8 @@ int main(int argc, char *argv[])
     tConfig             cfg;
     tEstadisticasLote   estadisticas;
     tUsuario            *lote;
-    FILE                *archivoUsuarios;
+    FILE                *archivoUsuarios,
+                        *archivoLog;
 
     if (leerArgumentos(argc, argv, &cfg) != EXITO)
         return 1;
@@ -217,5 +220,15 @@ int main(int argc, char *argv[])
                estadisticas.techoAciertos * 100.0);
 
     free(lote);
+
+    archivoLog = metalog_abrir("lote", cfg.pathSalida, cfg.semilla);
+    if (archivoLog)
+    {
+        fprintf(archivoLog, " | registros: %d | tamanyo_registro: %lu", cfg.usuarios, (unsigned long) sizeof(tUsuario));
+        metalog_cerrar(archivoLog);
+    }
+    else
+        fprintf(stderr, "Aviso: no se pudo actualizar %s\n", PATH_METALOG);
+
     return 0;
 }

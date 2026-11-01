@@ -1,5 +1,7 @@
-#include "../comun/posteo.h"
+#include "../../../include/constantes/constantes.h"
 #include "../comun/aleatorio.h"
+#include "../comun/metalog.h"
+#include "../comun/posteo.h"
 #include "vocabulario.h"
 
 #include <stdio.h>
@@ -8,6 +10,8 @@
 #include <time.h>
 
 #define PATH_SALIDA_DEFAULT "data/bin/posteos.dat"
+#define PARAM_CLAVE_SEMILLA "-s"
+#define PARAM_CLAVE_SALIDA "-o"
 
 typedef struct
 {
@@ -40,29 +44,31 @@ void mostrarUso(const char *programa)
 int main(int argc, char *argv[])
 {
     tConfig     cfg;
-    int         cantidad, i, id;
-    FILE        *lote;
+    int         cantidad,
+                i,
+                id;
+    FILE        *lote,
+                *archivoLog;
     tPost       posteoGenerado;
 
     cfg.semilla = (unsigned) time(NULL);
     cfg.pathSalida = PATH_SALIDA_DEFAULT;
     cantidad = CANTIDAD_REGISTROS_POSTEOS;
 
-    // Para evitar parámetros posicionales y mejorar un poco la comprensión del pasaje de argumentos del usuario
 
     for (i = 1; i < argc; i++)
     {
-        if (strcmp(argv[i], "-s") == 0 && i + 1 < argc)
-            cfg.semilla = (unsigned) strtoul(argv[++i], NULL, 10);
-        else if (strcmp(argv[i], "-o") == 0 && i + 1 < argc)
-            cfg.pathSalida = argv[++i];
+        if (strcmp(*(argv + i), "-s") == 0 && i + 1 < argc)
+            cfg.semilla = (unsigned) strtoul(*(argv + ++i), NULL, 10);
+        else if (strcmp(*(argv + i), PARAM_CLAVE_SALIDA) == 0 && i + 1 < argc)
+            cfg.pathSalida = *(argv + ++i);
         else
         {
-            mostrarUso(argv[0]);
+            mostrarUso(*argv);
             return 1;
         }
     }
-    
+
     fprintf(stderr, "Semilla utilizada: %u\n", cfg.semilla);
 
     lote = fopen(cfg.pathSalida, "wb");
@@ -83,5 +89,15 @@ int main(int argc, char *argv[])
     }
 
     fclose(lote);
+
+    archivoLog = metalog_abrir("datos", cfg.pathSalida, cfg.semilla);
+    if (archivoLog)
+    {
+        fprintf(archivoLog, " | registros: %d | tamanyo_registro: %lu", cantidad, (unsigned long) sizeof(tPost));
+        metalog_cerrar(archivoLog);
+    }
+    else
+        fprintf(stderr, "Aviso: no se pudo actualizar %s\n", PATH_METALOG);
+
     return 0;
 }
