@@ -15,10 +15,9 @@
 #define PARAM_CLAVE_SALIDA "-o"
 
 /**
-* @brief    Generar un CSV a partir de un archivo binario formateado de registros de posteos
-*           con el objetivo de debuggear posibles problemas en la generación de archivos binarios
-*           o visualizar con lo que se está trabajando.
-*
+* Generar un CSV a partir de un archivo binario formateado de registros de posteos
+* con el objetivo de debuggear posibles problemas en la generación de archivos binarios
+* o visualizar con lo que se está trabajando.
 */
 
 int main(int argc, char *argv[])

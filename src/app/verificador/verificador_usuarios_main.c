@@ -15,10 +15,10 @@
 
 
 /**
-* @brief    Generar un CSV a partir de un archivo binario formateado de registros de usuarios
-*           con el objetivo de debuggear posibles problemas en la generación de archivos binarios
-*           o visualizar con lo que se está trabajando. Especialmente útil para demostrar que
-*           se generan los lotes de usuarios de distintos tipos (concentrado, disperso, etc.)
+* Generar un CSV a partir de un archivo binario formateado de registros de usuarios
+* con el objetivo de debuggear posibles problemas en la generación de archivos binarios
+* o visualizar con lo que se está trabajando. Especialmente útil para demostrar que
+* se generan los lotes de usuarios de distintos tipos (concentrado, disperso, etc.)
 *
 */
 

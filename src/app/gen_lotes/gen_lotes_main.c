@@ -224,7 +224,7 @@ int main(int argc, char *argv[])
     archivoLog = metalog_abrir("lote", cfg.pathSalida, cfg.semilla);
     if (archivoLog)
     {
-        fprintf(archivoLog, " | registros: %d | tamanyo_registro: %lu", cfg.usuarios, (unsigned long) sizeof(tUsuario));
+        fprintf(archivoLog, " | registros: %lu | tamanyo_registro: %lu", cfg.usuarios, (unsigned long) sizeof(tUsuario));
         metalog_cerrar(archivoLog);
     }
     else

@@ -133,7 +133,7 @@ int distribucion_ordenada(tUsuario *lote, size_t cantidad)
 
 int distribucion_estadisticas(const tUsuario *lote, size_t cantidad, tEstadisticasLote *estadisticas)
 {
-    char    *vistos;
+    char    *vistos; /* Interpretese como bool */
     size_t  usuarioEnGeneracion;
     int     i, id;
 
@@ -168,7 +168,7 @@ int distribucion_estadisticas(const tUsuario *lote, size_t cantidad, tEstadistic
 
     free(vistos);
 
-    estadisticas->techoAciertos = 1.0 - (double) estadisticas->idsDistintos / (double) estadisticas->accesos;
+    estadisticas->techoAciertos = 1.0 - (double) estadisticas->idsDistintos / (double) estadisticas->accesos; /* Los aciertos ideales de la caché se degradan con el aumento de ids distintos en el lote */
 
     return EXITO;
 }
