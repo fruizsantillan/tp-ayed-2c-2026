@@ -1,7 +1,11 @@
 #ifndef VOCABULARIO_H_INCLUDED
 #define VOCABULARIO_H_INCLUDED
 
-#include <stdlib.h>
+#include <stddef.h>
+
+/*
+Interfaz para armarle un contenido al post
+*/
 
 typedef struct
 {

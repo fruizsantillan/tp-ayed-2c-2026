@@ -14,6 +14,7 @@ typedef struct
     char    contenido[MAX_CARACTERES_POSTEO+1];
 } tPost;
 
+/* Solo una función, la que usa proveedor para leer la base de datos, en caso de MISS o directamente sin caché */
 int posteo_leer(FILE *pf, int id, tPost *destino);
 
 #endif // POSTEO_H_INCLUDED
