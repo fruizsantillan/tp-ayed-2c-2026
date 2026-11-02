@@ -21,7 +21,7 @@ typedef struct
                     microsPorUsuario;
     int             alturaArbol,
                     alturaMinima;
-} tResultado; /* En los casos que no aplique, -1 (alturas en parte 1). Capacidad 0 infiere sin caché
+} tResultado; /* En los casos que no aplique, -1 (alturas en parte 1). Capacidad 0 infiere sin caché */
 
 /* Marca "AAAA-MM-DD HH:MM:SS". Se toma una vez por ejecucion: todas las filas de una misma ejecucion la comparten */
 void reporte_marcaTiempo        (char *marca);
